@@ -1,2 +1,1 @@
-# doodles-c
-Programming doodles in C
+# Programming doodles in C
