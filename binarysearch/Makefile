@@ -4,6 +4,8 @@ SHELL = /bin/sh
 .SUFFIXES:
 .SUFFIXES: .c .o
 
+CFLAGS +=-std=c99 -Wall -Wextra -Wpedantic
+
 all: binary_search
 
 clean:
