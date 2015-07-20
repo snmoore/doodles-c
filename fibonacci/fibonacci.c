@@ -13,22 +13,55 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void)
+// Iteratively print the Fibonacci sequence
+static void iterative(unsigned int n)
 {
     unsigned int Fn = 0;
     unsigned int Fn1 = 0;
     unsigned int Fn2 = 1;
     unsigned int i = 0;
 
-    printf("%u %u ", Fn1, Fn2);
-    for (i = 2; i < 13; i++)
+    printf("Iterative:\n%u %u ", Fn1, Fn2);
+    for (i = 2; i < n; i++)
     {
         Fn = Fn1 + Fn2;
         Fn1 = Fn2;
         Fn2 = Fn;
         printf("%u ", Fn);
     }
-    printf("\n");
+    printf("\n\n");
+}
+
+// Value of the nth term of the Fibonacci sequence, using recursion
+static unsigned int recurse(unsigned int n)
+{
+    if(n <= 1)
+    {
+        return n;
+    }
+    else
+    {
+        return recurse(n-1) + recurse(n-2);
+    }
+}
+
+// Recursively print the Fibonacci sequence
+static void recursive(unsigned int n)
+{
+    unsigned int i = 0;
+
+    printf("Recursive:\n");
+    for (i = 0; i < n; i++)
+    {
+        printf("%u ", recurse(i));
+    }
+    printf("\n\n");
+}
+
+int main(void)
+{
+    iterative(13);
+    recursive(13);
 
     return EXIT_SUCCESS;
 }
