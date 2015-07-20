@@ -12,8 +12,8 @@
 //
 // See https://en.wikipedia.org/wiki/Binary_search_algorithm
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>      // For printf
+#include <stdlib.h>     // For EXIT_SUCCESS, bsearch
 
 #define NOT_FOUND       -1
 #define NELEMENTS(a)    (sizeof(a) / sizeof(a[0]))
@@ -22,19 +22,20 @@
 int iterative(int *Values, int Key, int Lower, int Upper)
 {
     // Continually narrow the search until just one element remains
-    while(Upper >= Lower)
+    while (Upper >= Lower)
     {
         // Calculate the midpoint to split the set in two
         int Midpoint = (Upper + Lower) / 2;
-        printf("Key: %d Lower: %d Midpoint %d Upper: %d\n", Key, Lower, Midpoint, Upper);
+        printf("Key: %d Lower: %d Midpoint %d Upper: %d\n", Key, Lower,
+                Midpoint, Upper);
 
         // Is the key at the midpoint?
-        if(Key == Values[Midpoint])
+        if (Key == Values[Midpoint])
         {
             return Midpoint;
         }
         // Is the key within the lower half? */
-        else if(Key < Values[Midpoint])
+        else if (Key < Values[Midpoint])
         {
             // Continue the search in the lower half
             Upper = Midpoint - 1;
@@ -54,7 +55,7 @@ int iterative(int *Values, int Key, int Lower, int Upper)
 int recursive(int *Values, int Key, int Lower, int Upper)
 {
     // Are there no more elements remaining?
-    if(Upper < Lower)
+    if (Upper < Lower)
     {
         return NOT_FOUND;
     }
@@ -63,15 +64,16 @@ int recursive(int *Values, int Key, int Lower, int Upper)
     {
         // Calculate the midpoint to split the set in two
         int Midpoint = (Upper + Lower) / 2;
-        printf("Key: %d Lower: %d Midpoint %d Upper: %d\n", Key, Lower, Midpoint, Upper);
+        printf("Key: %d Lower: %d Midpoint %d Upper: %d\n", Key, Lower,
+                Midpoint, Upper);
 
         // Is the key at the midpoint?
-        if(Key == Values[Midpoint])
+        if (Key == Values[Midpoint])
         {
             return Midpoint;
         }
         // Is the key within the lower half? */
-        else if(Key < Values[Midpoint])
+        else if (Key < Values[Midpoint])
         {
             // Continue the search in the lower half
             return recursive(Values, Key, Lower, Midpoint - 1);
@@ -99,13 +101,13 @@ int recursive2(int *Values, int Key, int Lower, int Upper)
     //      Iteration N+1:  Lower = 9, Upper = 10 ==> Midpoint = 9
     //
     // Hence the need to test Key == Values[Upper] as well
-    if(Upper - Lower <= 1)
+    if (Upper - Lower <= 1)
     {
-        if(Key == Values[Lower])
+        if (Key == Values[Lower])
         {
             return Lower;
         }
-        else if(Key == Values[Upper])
+        else if (Key == Values[Upper])
         {
             return Upper;
         }
@@ -124,10 +126,11 @@ int recursive2(int *Values, int Key, int Lower, int Upper)
         // addition may overflow
         int Midpoint = Lower + ((Upper - Lower) / 2);
 
-        printf("Key: %d Lower: %d Midpoint %d Upper: %d\n", Key, Lower, Midpoint, Upper);
+        printf("Key: %d Lower: %d Midpoint %d Upper: %d\n", Key, Lower,
+                Midpoint, Upper);
 
         // Is the key within the range of the upper set?
-        if(Key >= Values[Midpoint])
+        if (Key >= Values[Midpoint])
         {
             // Continue search in the upper set
             return recursive2(Values, Key, Midpoint, Upper);
@@ -140,11 +143,49 @@ int recursive2(int *Values, int Key, int Lower, int Upper)
     }
 }
 
+// Comparison function used with bsearch
+int Compare(const void *Key, const void *Value)
+{
+    int key = *(int *) Key;
+    int value = *(int *) Value;
+
+    printf("Key: %d Value: %d\n", key, value);
+
+    if (key < value)
+    {
+        return -1;
+    }
+    else if (key > value)
+    {
+        return 1;
+    }
+    else // key == value
+    {
+        return 0;
+    }
+}
+
+// Binary search using the built-in function from the C library
+int builtin(int *Values, size_t NumElements, int *Key)
+{
+    int *Match = (int *) bsearch(Key, Values, NumElements, sizeof(Values[0]),
+            Compare);
+    if (Match != NULL)
+    {
+        return Match - Values;
+    }
+    else
+    {
+        return NOT_FOUND;
+    }
+}
+
 int main(void)
 {
-    int Values[] = { 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 23, 27, 29, 32, 31, 37, 64, 81 };
-    int Key      = NOT_FOUND;
-    int Index    = NOT_FOUND;
+    int Values[] =
+    { 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 23, 27, 29, 32, 31, 37, 64, 81 };
+    int Key = NOT_FOUND;
+    int Index = NOT_FOUND;
 
     Key = 3;
     Index = iterative(Values, Key, 0, NELEMENTS(Values) - 1);
@@ -169,6 +210,14 @@ int main(void)
     Key = 14;
     Index = recursive2(Values, Key, 0, NELEMENTS(Values) - 1);
     printf("Recursive 2: %d ==> %d\n\n", Key, Index);
+
+    Key = 3;
+    Index = builtin(Values, NELEMENTS(Values), &Key);
+    printf("Built-in: %d ==> %d\n\n", Key, Index);
+
+    Key = 14;
+    Index = builtin(Values, NELEMENTS(Values), &Key);
+    printf("Built-in: %d ==> %d\n\n", Key, Index);
 
     return EXIT_SUCCESS;
 }
