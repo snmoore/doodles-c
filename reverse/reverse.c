@@ -1,4 +1,4 @@
-// Reverse strings using various methods
+// Reverse words and sentences
 //
 // These simple implementations have many problems with:
 //  Strings that are not NUL terminated
