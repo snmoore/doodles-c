@@ -6,3 +6,6 @@ Generate the first 13 terms of the Fibonacci sequence:
 
 ## binary_search
 Find the position of a target value (a key) in a sorted array using a binary search.
+
+## reverse
+Reverse words and sentences.
