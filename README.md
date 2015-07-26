@@ -9,3 +9,6 @@ Find the position of a target value (a key) in a sorted array using a binary sea
 
 ## reverse
 Reverse words and sentences.
+
+## stack
+A stack implemented using a linked list.
