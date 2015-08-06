@@ -1,10 +1,13 @@
 // Round up an integer to the next highest power of 2
+// Do not round up if the integer is a power of 2
+//
+// See https://graphics.stanford.edu/~seander/bithacks.html
 
 #include <limits.h> // For UINT_MAX;
 #include <stdio.h>  // For printf
 #include <stdlib.h> // For EXIT_SUCCESS
 
-// Round up an integer to the next highest power of 2 using the classic but non-obvious method
+// The classic but non-obvious method
 unsigned int roundup(unsigned int v) {
     // 0 should round up to 1
     v += (v == 0);
@@ -21,7 +24,7 @@ unsigned int roundup(unsigned int v) {
     return v;
 }
 
-// Round up an integer to the next highest power of 2 using a slower but more obvious method
+// Slower but more obvious method
 unsigned int obvious(unsigned int v) {
     // Is v a power of 2?
     if((v & (v - 1)) == 0) {
@@ -31,16 +34,18 @@ unsigned int obvious(unsigned int v) {
     }
     else
     {
-        // Avoid overflow
-        if(v == UINT_MAX) {
-            return 0;
-        } else {
-            // Next highest power is represented by setting the bit to the left of the MSB
-            unsigned int bit = 1;
-            while(v >>= 1) {
-                bit++;
-            }
+        // Locate the MSB
+        unsigned int bit = 1;
+        while(v >>= 1) {
+            bit++;
+        }
+
+        // Set the bit to the left of the MSB, unless it would wrap-around
+        if(bit < 32) {
             return 1 << bit;
+        }
+        else {
+            return 0;
         }
     }
 }
