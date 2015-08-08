@@ -5,28 +5,24 @@
 #include <stdlib.h>     // For EXIT_SUCCESS, malloc, free
 
 typedef struct node_t node_t;
-struct node_t
-{
-    void *data;
+struct node_t {
+    void   *data;
     node_t *next;
 };
 
 // Initialize the stack
-static void initialize(node_t **head)
-{
+static void initialize(node_t **head) {
     *head = NULL;
 }
 
 // Destroy the stack
-static void destroy(node_t **head)
-{
+static void destroy(node_t **head) {
     node_t *node;
     node_t *next;
 
     // Free any nodes that remain in the stack
     printf("Destroyed items:\n");
-    for (node = *head; node != NULL; node = next)
-    {
+    for(node = *head; node != NULL; node = next) {
         next = node->next;
         printf("%d ", (int) node->data);
         free(node);
@@ -38,14 +34,12 @@ static void destroy(node_t **head)
 }
 
 // Is the stack empty?
-static bool isempty(node_t *head)
-{
+static bool isempty(node_t *head) {
     return head == NULL;
 }
 
 // Push an item onto the stack
-static void push(node_t **head, node_t *node)
-{
+static void push(node_t **head, node_t *node) {
     // Node points to the previous head
     node->next = *head;
 
@@ -54,12 +48,10 @@ static void push(node_t **head, node_t *node)
 }
 
 // Pop an item off the stack
-static node_t * pop(node_t **head)
-{
+static node_t * pop(node_t **head) {
     node_t *node = NULL;
 
-    if (!isempty(*head))
-    {
+    if(!isempty(*head)) {
         // Get the node at the head
         node = *head;
 
@@ -73,46 +65,39 @@ static node_t * pop(node_t **head)
 }
 
 // Reverse the order of items in the stack
-static void reverse(node_t **head)
-{
+static void reverse(node_t **head) {
     node_t *curr = *head;
     node_t *prev = NULL;
     node_t *next;
 
-    while (curr != NULL)
-    {
-        next = curr->next;
+    while(curr != NULL) {
+        next       = curr->next;
         curr->next = prev;
-        prev = curr;
-        curr = next;
+        prev       = curr;
+        curr       = next;
     }
 
     *head = prev;
 }
 
 // Print the contents of the stack
-static void print(node_t **head)
-{
+static void print(node_t **head) {
     printf("Stack contents:\n");
-    for (node_t *node = *head; node != NULL; node = node->next)
-    {
+    for(node_t *node = *head; node != NULL; node = node->next) {
         printf("%d ", (int) node->data);
     }
     printf("\n\n");
 }
 
-int main(void)
-{
+int main(void) {
     // Initialize the stack
     node_t *head;
     initialize(&head);
 
     // Push some items onto the stack
-    for (int i = 0; i < 10; i++)
-    {
+    for(int i = 0; i < 10; i++) {
         node_t *node = malloc(sizeof(node_t));
-        if (node != NULL)
-        {
+        if(node != NULL) {
             node->data = (void *) i;
             push(&head, node);
         }
@@ -123,8 +108,7 @@ int main(void)
 
     // Pop some items from the stack
     printf("Popped items:\n");
-    for (int i = 0; i < 5; i++)
-    {
+    for(int i = 0; i < 5; i++) {
         node_t *node = pop(&head);
         printf("%d ", (int) node->data);
         free(node);

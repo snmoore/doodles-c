@@ -35,9 +35,8 @@ int my_atoi(const char *str) {
 }
 
 int main(void) {
-    char *strings[] = {              /* INT_MAX */
-            "0", "11", "+11", "-11", "2147483647", "abc", ""
-    };
+    char *strings[] = { "0", "11", "+11", "-11", "2147483647", "abc", "" };
+                                                 /* INT_MAX */
 
     printf("String\tMy atio\tatoi\n");
     for(size_t i = 0; i < NELEMENTS(strings); i++) {

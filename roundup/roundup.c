@@ -32,8 +32,7 @@ unsigned int obvious(unsigned int v) {
         v += (v == 0);
         return v;
     }
-    else
-    {
+    else {
         // Locate the MSB
         unsigned int bit = 1;
         while(v >>= 1) {
