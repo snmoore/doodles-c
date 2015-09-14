@@ -13,6 +13,9 @@ Generate the first 13 terms of the Fibonacci sequence:
 ## matrix_multiply
 Multiply two matrices with dimensions m x n and n x p
 
+## matrix_transpose
+Transpose a matrix
+
 ## reverse
 Reverse words and sentences
 
