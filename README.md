@@ -24,3 +24,6 @@ Round up an integer to the next highest power of 2
 
 ## stack
 A stack implemented using a linked list
+
+## linked_list
+Single and doubly linked lists
