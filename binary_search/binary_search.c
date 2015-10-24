@@ -36,8 +36,7 @@ int iterative(int *Values, int Key, int Lower, int Upper) {
             Upper = Midpoint - 1;
         }
         // Is the key within the upper half? */
-        else // if(Key > Values[Midpoint])
-        {
+        else { // if(Key > Values[Midpoint])
             // Continue the search in the upper half
             Lower = Midpoint + 1;
         }
@@ -68,8 +67,7 @@ int recursive(int *Values, int Key, int Lower, int Upper) {
             return recursive(Values, Key, Lower, Midpoint - 1);
         }
         // Is the key within the upper half? */
-        else // if(Key > Values[Midpoint])
-        {
+        else { // if(Key > Values[Midpoint])
             // Continue the search in the upper half
             return recursive(Values, Key, Midpoint + 1, Upper);
         }
@@ -136,8 +134,7 @@ int Compare(const void *Key, const void *Value) {
     else if(key > value) {
         return 1;
     }
-    else // key == value
-    {
+    else { // key == value
         return 0;
     }
 }
