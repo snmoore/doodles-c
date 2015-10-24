@@ -7,29 +7,30 @@
 
 int * transpose(int *matrix, unsigned int rows, unsigned int cols) {
     // Resulting matrix has dimensions cols x rows
-    int *trans = calloc(cols * rows, sizeof(int));
-    if(trans == NULL)
+    int *transp = calloc(cols * rows, sizeof(int));
+    if(transp == NULL)
     {
         printf("malloc failed: %s", strerror(errno));
         return NULL;
     }
 
     // Transpose the matrix
-    for(unsigned int m = 0; m < rows; m++) {
-        for(unsigned int n = 0; n < cols; n++) {
-            trans[n*rows + m] = matrix[m*cols + n];
+    for(unsigned int r = 0; r < rows; r++) {
+        for(unsigned int c = 0; c < cols; c++) {
+            transp[c*rows + r] =
+            matrix[r*cols + c];
         }
     }
 
-    return trans;
+    return transp;
 }
 
 // Utility function to print a matrix
-void print(char *label, int *m, unsigned int rows, unsigned int cols) {
+void print(char *label, int *matrix, unsigned int rows, unsigned int cols) {
     printf("\n%s\n", label);
     for(unsigned int r = 0; r < rows; r++) {
         for(unsigned int c = 0; c < cols; c++) {
-            printf("%3d ", m[r*cols + c]);
+            printf("%3d ", matrix[r*cols + c]);
         }
         printf("\n");
     }
