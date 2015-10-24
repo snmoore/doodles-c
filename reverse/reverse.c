@@ -14,12 +14,12 @@
 
 // Reverse a string in place using a temporary variable
 static char *reverse_temp(char *string, size_t length) {
-    if((string != NULL) && (string[0] != '\0') && (length > 0)) {
+    if((string != NULL) && (length > 0)) {
         char temp;
-        for(size_t i = 0, k = length - 1; i < length / 2; i++, k--) {
-            temp      = string[k];
-            string[k] = string[i];
-            string[i] = temp;
+        for(size_t left = 0, right = length - 1; right > left; left++, right--) {
+            temp          = string[right];
+            string[right] = string[left];
+            string[left]  = temp;
         }
     }
 
@@ -28,14 +28,14 @@ static char *reverse_temp(char *string, size_t length) {
 
 // Reverse a string in place using a temporary variable and pointers
 static char *reverse_temp_pointer(char *string, size_t length) {
-    if((string != NULL) && (string[0] != '\0') && (length > 0)) {
+    if((string != NULL) && (length > 0)) {
+        char *left  = string;
+        char *right = string + length - 1;
         char temp;
-        char *start = string;
-        char *right = &string[length - 1];
-        while(right - start > 0) {
+        while(right - left > 0) {
             temp     = *right;
-            *right-- = *start;
-            *start++ = temp;
+            *right-- = *left;
+            *left++  = temp;
         }
     }
 
@@ -44,11 +44,11 @@ static char *reverse_temp_pointer(char *string, size_t length) {
 
 // Reverse a string in place using XOR
 static char *reverse_xor(char *string, size_t length) {
-    if((string != NULL) && (string[0] != '\0') && (length > 0)) {
-        for(size_t i = 0, k = length - 1; i < length / 2; i++, k--) {
-            string[k] ^= string[i];
-            string[i] ^= string[k];
-            string[k] ^= string[i];
+    if((string != NULL) && (length > 0)) {
+        for(size_t left = 0, right = length - 1; right > left; left++, right--) {
+            string[right] ^= string[left];
+            string[left]  ^= string[right];
+            string[right] ^= string[left];
         }
     }
 
@@ -69,12 +69,10 @@ static char *reverse_sentence(char *sentence, size_t length) {
                     start = NULL;
                 }
             }
-            else {
-                if(start == NULL) {
-                    // Found the start of a word
-                    start = sentence + i;
-                }
-            }
+            else if(start == NULL) {
+				// Found the start of a word
+				start = sentence + i;
+			}
         }
         // Reverse the final word
         reverse_xor(start, sentence + i - start);
@@ -104,4 +102,3 @@ int main(void) {
 
     return EXIT_SUCCESS;
 }
-
