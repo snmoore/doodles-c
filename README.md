@@ -27,3 +27,6 @@ A stack implemented using a linked list
 
 ## linked_list
 Single and doubly linked lists
+
+## duffs_device
+Duff's Device
