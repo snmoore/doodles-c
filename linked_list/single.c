@@ -33,7 +33,7 @@ struct node_t {
 node_t * create(int data) {
     node_t *node = malloc(sizeof(node_t));
     if(node == NULL) {
-        printf("ERROR! %s", strerror(errno));
+        printf("%s", strerror(errno));
         return NULL;
     }
     node->data = data;
@@ -45,6 +45,7 @@ node_t * create(int data) {
 bool insert_head(node_t **head, int data) {
     node_t *new = create(data);
     if(new == NULL) {
+        printf("Failed to insert");
         return false;
     }
     new->next = *head;
@@ -53,14 +54,22 @@ bool insert_head(node_t **head, int data) {
 }
 
 // Delete a node at the head of the linked list
-int delete_head(node_t **head) {
+bool delete_head(node_t **head) {
     node_t *node = *head;
-    int data = node->data;
-
+    if(node == NULL) {
+        printf("List was empty");
+        return false;
+    }
     *head = node->next;
     free(node);
+    return true;
+}
 
-    return data;
+// Destroy a linked list
+void destroy(node_t **head) {
+    while(*head != NULL) {
+        delete_head(head);
+    }
 }
 
 // Reverse the linked list
@@ -79,16 +88,16 @@ void reverse(node_t **head) {
         prev       = curr;
         curr       = next;
     }
-
     *head = prev;
 }
 
 // Print the contents of the linked list
 void print(node_t *head) {
     while(head != NULL) {
-        printf("Node: %d\n", head->data);
+        printf("%d ", head->data);
         head = head->next;
     }
+    printf("\n");
 }
 
 int main(void) {
@@ -99,6 +108,7 @@ int main(void) {
     }
 
     // Insert some nodes
+    printf("\nInsert some nodes:\n");
     bool result = true;
     for(int i = 1; i < 10 && result == true; i++) {
         result = insert_head(&head, i);
@@ -106,15 +116,19 @@ int main(void) {
     print(head);
 
     // Reverse the linked list
+    printf("\nReverse the linked list:\n");
     reverse(&head);
     print(head);
 
     // Delete some nodes
+    printf("\nDelete some nodes:\n");
     for(int i = 0; i < 5; i++) {
-        int data = delete_head(&head);
-        printf("Deleted: %d\n", data);
+        delete_head(&head);
     }
     print(head);
+
+    // Destroy the linked list
+    destroy(&head);
 
     return EXIT_SUCCESS;
 }
