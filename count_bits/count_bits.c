@@ -39,7 +39,7 @@ int main(void) {
     // Count the number of bits set using the obvious method
     printf("\nKernighan's method:\n");
     for(size_t i = 0; i < NELEMENTS(values); i++) {
-        printf("Value: %3u, bits: %u\n", values[i], obvious(values[i]));
+        printf("Value: %3u, bits: %u\n", values[i], kernighan(values[i]));
     }
 
     return EXIT_SUCCESS;
