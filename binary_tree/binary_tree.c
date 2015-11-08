@@ -332,5 +332,8 @@ int main(void) {
     printf("\nTree:\n");
     print_tree(tree, 0);
 
+    // Destroy the tree
+    destroy(&tree);
+
     return EXIT_SUCCESS;
 }
