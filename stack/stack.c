@@ -6,7 +6,7 @@
 
 typedef struct node_t node_t;
 struct node_t {
-    void   *data;
+    int     data;
     node_t *next;
 };
 
@@ -24,7 +24,7 @@ static void destroy(node_t **head) {
     printf("Destroyed items:\n");
     for(node = *head; node != NULL; node = next) {
         next = node->next;
-        printf("%d ", (int) node->data);
+        printf("%d ", node->data);
         free(node);
     }
     printf("\n\n");
@@ -84,7 +84,7 @@ static void reverse(node_t **head) {
 static void print(node_t **head) {
     printf("Stack contents:\n");
     for(node_t *node = *head; node != NULL; node = node->next) {
-        printf("%d ", (int) node->data);
+        printf("%d ", node->data);
     }
     printf("\n\n");
 }
@@ -98,7 +98,7 @@ int main(void) {
     for(int i = 0; i < 10; i++) {
         node_t *node = malloc(sizeof(node_t));
         if(node != NULL) {
-            node->data = (void *) i;
+            node->data = i;
             push(&head, node);
         }
     }
