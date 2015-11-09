@@ -2,11 +2,11 @@
 //      0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...
 //
 // In mathematical terms, the sequence Fn of Fibonacci numbers is defined by the recurrence relation
-//      F_n = F_{n-1} + F_{n-2}
+//      F{n} = F{n-1} + F{n-2}
 //  with seed values
-//      F_1 = 1, F_2 = 1
+//      F{1} = 1, F{2} = 1
 //  or (modern usage)
-//      F_0 = 0, F_1 = 1
+//      F{0} = 0, F{1} = 1
 //
 // See https://en.wikipedia.org/wiki/Fibonacci_number
 
@@ -15,16 +15,16 @@
 
 // Iteratively print the Fibonacci sequence
 static void iterative(unsigned int n) {
-    unsigned int Fn  = 0;
-    unsigned int Fn1 = 0;
-    unsigned int Fn2 = 1;
-    unsigned int i   = 0;
+    unsigned int Fn_2 = 0; // F{0} = 0
+    unsigned int Fn_1 = 1; // F{1} = 1
+    unsigned int Fn   = 0;
+    unsigned int i    = 0;
 
-    printf("Iterative:\n%u %u ", Fn1, Fn2);
+    printf("Iterative:\n%u %u ", Fn_2, Fn_1);
     for(i = 2; i < n; i++) {
-        Fn  = Fn1 + Fn2;
-        Fn1 = Fn2;
-        Fn2 = Fn;
+        Fn   = Fn_1 + Fn_2;
+        Fn_2 = Fn_1;
+        Fn_1 = Fn;
         printf("%u ", Fn);
     }
     printf("\n\n");
