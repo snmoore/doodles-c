@@ -16,7 +16,7 @@
 static char *reverse_temp(char *string, size_t length) {
     if((string != NULL) && (length > 0)) {
         char temp;
-        for(size_t left = 0, right = length - 1; right > left; left++, right--) {
+        for(size_t left = 0, right = length - 1; left < right; left++, right--) {
             temp          = string[right];
             string[right] = string[left];
             string[left]  = temp;
@@ -45,7 +45,7 @@ static char *reverse_temp_pointer(char *string, size_t length) {
 // Reverse a string in place using XOR
 static char *reverse_xor(char *string, size_t length) {
     if((string != NULL) && (length > 0)) {
-        for(size_t left = 0, right = length - 1; right > left; left++, right--) {
+        for(size_t left = 0, right = length - 1; left < right; left++, right--) {
             string[right] ^= string[left];
             string[left]  ^= string[right];
             string[right] ^= string[left];
