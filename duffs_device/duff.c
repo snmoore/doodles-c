@@ -1,3 +1,7 @@
+// Duff's Device for copying data
+//
+// See https://en.wikipedia.org/wiki/Duff%27s_device
+
 #include <time.h>       // For clock
 #include <stdio.h>      // For printf
 #include <stdlib.h>     // For EXIT_SUCCESS
@@ -7,11 +11,8 @@
 #define BYTES (1024*1024*400)
 
 // Duff's Device in standard form
-static void duff(volatile short int *to, volatile short int *from, int count) {
-    // Set some markers that can be checked later
-    from[0]       = 1;
-    from[count-1] = 2;
-    printf("Duff's Device: [%hd %hd]\n", from[0], from[count-1]);
+static clock_t duff(volatile short int *to, volatile short int *from, size_t bytes) {
+    int count = bytes/sizeof(from[0]);
 
     // Copy using Duff's Device, with time stamps before and after
     clock_t Start = clock();
@@ -29,53 +30,60 @@ static void duff(volatile short int *to, volatile short int *from, int count) {
     }
     clock_t Stop = clock();
 
-    // Check the markers to verify the code was not optimized away
-    printf("Duff's Device: [%hd %hd] ", from[0], from[count-1]);
-
-    // Check the execution time
-    printf("%lu usec\n", Stop - Start);
+    // Return the elapsed time in microseconds
+    return Stop - Start;
 }
 
 // Loop alternative to Duff's Device
-static void loop(short int *to, short int *from, int count) {
-    // Set some markers that can be checked later
-    from[0]       = 3;
-    from[count-1] = 4;
-    printf("Loop: [%hd %hd]\n", from[0], from[count-1]);
+static clock_t loop(volatile short int *to, volatile short int *from, size_t bytes) {
+    int count = bytes/sizeof(from[0]);
 
     // Copy using a simple loop, with time stamps before and after
     clock_t Start = clock();
-    do
-    {
+    while(count--) {
         *to++ = *from++;
-    } while(--count > 0);
+    }
     clock_t Stop = clock();
 
-    // Check the markers to verify the code was not optimized away
-    printf("Loop: [%hd %hd] ", from[0], from[count-1]);
-
-    // Check the execution time
-    printf("%lu usec\n", Stop - Start);
+    // Return the elapsed time in microseconds
+    return Stop - Start;
 }
 
 // Builtin alternative to Duff's Device, using memcpy
-static void builtin(short int *to, short int *from, size_t bytes) {
-    // Set some markers that can be checked later
-    int end = bytes/sizeof(from[0])-1;
-    from[0] = 5;
-    from[end] = 6;
-    printf("Memcpy: [%hd %hd]\n", from[0], from[end]);
-
+static clock_t builtin(volatile short int *to, volatile short int *from, size_t bytes) {
     // Copy using memcpy, with time stamps before and after
     clock_t Start = clock();
-    memcpy(to, from, bytes);
+    memcpy((void*)to, (void*)from, bytes);
     clock_t Stop = clock();
 
-    // Check the markers to verify the code was not optimized away
-    printf("Memcpy: [%hd %hd] ", from[0], from[end]);
+    // Return the elapsed time in microseconds
+    return Stop - Start;
+}
 
-    // Check the execution time
-    printf("%lu usec\n", Stop - Start);
+// Run a test multiple times using the supplied function
+typedef clock_t (*function_t)(volatile short int *to, volatile short int *from, size_t bytes);
+static void runner(volatile short int *dst, volatile short int *src, size_t bytes, int iterations, function_t function, char* name) {
+    int end = bytes/sizeof(src[0])-1;
+
+    // Run the test multiple times
+    for(int i = 0; i < iterations; i++)
+    {
+        printf("%-7s src[%hd, %hd, %hd .. %hd, %hd, %hd]\n", name, src[0], src[1], src[2], src[end-2], src[end-1], src[end]);
+
+        // Clear out the destination buffer
+        memset((void*)dst, 0, BYTES);
+
+        // Copy src to dst using the supplied function
+        clock_t usec = function(dst, src, bytes);
+
+        printf("         to[%hd, %hd, %hd .. %hd, %hd, %hd] = ", dst[0], dst[1], dst[2], dst[end-2], dst[end-1], dst[end]);
+        printf("%lu usec\n", usec);
+
+        // Verify the data was really copied
+        if(memcmp((void*)dst, (void*)src, BYTES) != 0) {
+            printf("!!! Data was not copied correctly\n");
+        }
+    }
 }
 
 int main(void) {
@@ -87,25 +95,19 @@ int main(void) {
     short int *Dst = (short int *)malloc(BYTES);
     if((Src != NULL) && (Dst != NULL))
     {
-        int i = 0;
+        // Set the source data to be copied
+        for(size_t i = 0; i < BYTES/sizeof(Src[0]); i++) {
+            Src[i] = (short int)i;
+        }
 
         // Run the Duff's Device test 10 times
-        for(i = 0; i < 10; i++)
-        {
-            duff(Dst, Src, BYTES / sizeof(short int));
-        }
+        runner(Dst, Src, BYTES, 10, duff, "Duff");
 
         // Run the loop test 10 times
-        for(i = 0; i < 10; i++)
-        {
-            loop(Dst, Src, BYTES / sizeof(short int));
-        }
+        runner(Dst, Src, BYTES, 10, loop, "Loop");
 
         // Run the builtin test 10 times
-        for(i = 0; i < 10; i++)
-        {
-            builtin(Dst, Src, BYTES);
-        }
+        runner(Dst, Src, BYTES, 10, builtin, "Builtin");
 
         // Success
         result = EXIT_SUCCESS;
