@@ -37,6 +37,9 @@ Transpose a matrix
 ## reverse
 Reverse words and sentences
 
+## roman_numerals
+Convert Roman numerals to decimal values
+
 ## roundup
 Round up an integer to the next highest power of 2
 
