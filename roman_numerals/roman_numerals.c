@@ -3,7 +3,7 @@
 // See https://en.wikipedia.org/wiki/Roman_numerals
 //
 // Note that when converting a Roman numeral string to a decimal value it is
-// easier to the string from right-to-left rather than left-to-right:
+// easier to process the string from right-to-left rather than left-to-right:
 //
 //  right-to-left : only need the current and previous numeral to decide whether
 //                  to add or subtract
