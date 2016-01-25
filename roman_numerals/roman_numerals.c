@@ -1,9 +1,9 @@
-// Convert Roman numerals to decimal values
+// Convert Roman numerals to decimal values and vice versa
 //
 // See https://en.wikipedia.org/wiki/Roman_numerals
 //
-// Note that it is easier to process a Roman numeral string from right-to-left
-// rather than left-to-right:
+// Note that when converting a Roman numeral string to a decimal value it is
+// easier to the string from right-to-left rather than left-to-right:
 //
 //  right-to-left : only need the current and previous numeral to decide whether
 //                  to add or subtract
@@ -14,6 +14,11 @@
 #include <stdio.h>  // For printf
 #include <stdlib.h> // For EXIT_SUCCESS, NULL, size_t
 #include <string.h> // For strlen
+
+#define NELEMENTS(a)    (sizeof(a) / sizeof(a[0]))
+
+// Note that 1888 is 13 numerals: MDCCCLXXXVIII
+#define MAX_NUMERALS    13
 
 // Convert a single Roman numeral to decimal
 unsigned int char_to_decimal(char numeral) {
@@ -71,14 +76,77 @@ unsigned int string_to_decimal(char* string) {
     return sum;
 }
 
+// Convert a decimal value to a Roman numeral string
+char* decimal_to_string(unsigned int decimal) {
+    if(decimal == 0) {
+        printf("Bad argument\n");
+        return NULL;
+    }
+
+    char* string = malloc(MAX_NUMERALS + 1);
+    if(string == NULL) {
+        printf("Bad malloc\n");
+        return NULL;
+    }
+
+    // Map of decimal values to single Roman numerals
+    typedef struct map_t {
+        unsigned int decimal;
+        char         numeral;
+    } map_t;
+    map_t map[] = {
+        { 1000, 'M' },
+        { 500,  'D' },
+        { 100,  'C' },
+        { 50,   'L' },
+        { 10,   'X' },
+        { 5,    'V' },
+        { 1,    'I' },
+    };
+
+    // Work from M to I, subtracting numeral values whilst building the string
+    size_t j = 0;
+    for(size_t i = 0; i < NELEMENTS(map) && decimal > 0; i++) {
+        // Use the current numeral as many times as possible
+        while(map[i].decimal <= decimal) {
+                string[j++] = map[i].numeral;
+                decimal -= map[i].decimal;
+        }
+
+        // Try subtractive notation before moving to the next lower numeral...
+
+        // Subtractive notation using non-adjacent numerals e.g. IX, XC, CM
+        if(((i + 2) < NELEMENTS(map)) &&
+           ((map[i].decimal != 50)  && (map[i].decimal != 500)) && // VL and LD are not valid
+           (decimal >= map[i].decimal - map[i+2].decimal)) {
+            string[j++] = map[i+2].numeral;
+            string[j++] = map[i].numeral;
+            decimal -= map[i].decimal - map[i+2].decimal;
+        }
+        // Subtractive notation using adjacent numerals e.g. IV, XL or CD
+        else if(((i + 1) < NELEMENTS(map)) &&
+                ((map[i].decimal / map[i+1].decimal) == 5) &&   // VX, LC and DM are not valid
+                (decimal >= map[i].decimal - map[i+1].decimal)) {
+            string[j++] = map[i+1].numeral;
+            string[j++] = map[i].numeral;
+            decimal -= map[i].decimal - map[i+1].decimal;
+        }
+    }
+    string[j] = '\0';
+
+    return string;
+}
+
 // Common test function
-void test(char* roman, unsigned int decimal) {
-    unsigned int result = string_to_decimal(roman);
-    if(result == decimal) {
-        printf("%6s %u\n", roman, result);
+void test(char* string, unsigned int decimal) {
+    // Convert in both directions
+    unsigned int s2d = string_to_decimal(string);
+    char*        d2s = decimal_to_string(decimal);
+    if((s2d == decimal) && (strcmp(d2s, string) == 0)) {
+        printf("%13s %u\n", d2s, s2d);
     }
     else {
-        printf("%6s - bad conversion\n", roman);
+        printf("%13s - bad conversion, should be %s\n", string, d2s);
     }
 }
 
@@ -120,10 +188,11 @@ int main(void) {
 
     // Various years
     printf("Various years:\n");
-    test("MCMIV",  1904); // from Wikipedia
-    test("MCMLIV", 1954); // from Wikipedia - as in the trailer for the movie The Last Time I Saw Paris
-    test("MCMXC",  1990); // from Wikipedia - used as the title of musical project Enigma's debut album MCMXC a.D., named after the year of its release.
-    test("MMXIV",  2014); // from Wikipedia - the year of the games of the XXII (22nd) Olympic Winter Games (in Sochi)
+    test("MDCCCLXXXVIII", 1888); // a very long year
+    test("MCMIV",         1904); // from Wikipedia
+    test("MCMLIV",        1954); // from Wikipedia - as in the trailer for the movie The Last Time I Saw Paris
+    test("MCMXC",         1990); // from Wikipedia - used as the title of musical project Enigma's debut album MCMXC a.D., named after the year of its release.
+    test("MMXIV",         2014); // from Wikipedia - the year of the games of the XXII (22nd) Olympic Winter Games (in Sochi)
     printf("\n");
 
     // Invalid combinations for subtractive notation
