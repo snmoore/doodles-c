@@ -15,10 +15,9 @@ int * transpose(int *matrix, unsigned int rows, unsigned int cols) {
     }
 
     // Transpose the matrix
-    for(unsigned int r = 0; r < rows; r++) {
-        for(unsigned int c = 0; c < cols; c++) {
-            transp[c*rows + r] =
-            matrix[r*cols + c];
+    for(unsigned int m = 0; m < rows; m++) {
+        for(unsigned int n = 0; n < cols; n++) {
+            transp[n*rows + m] = matrix[m*cols + n];
         }
     }
 
@@ -28,9 +27,9 @@ int * transpose(int *matrix, unsigned int rows, unsigned int cols) {
 // Utility function to print a matrix
 void print(char *label, int *matrix, unsigned int rows, unsigned int cols) {
     printf("\n%s\n", label);
-    for(unsigned int r = 0; r < rows; r++) {
-        for(unsigned int c = 0; c < cols; c++) {
-            printf("%3d ", matrix[r*cols + c]);
+    for(unsigned int m = 0; m < rows; m++) {
+        for(unsigned int n = 0; n < cols; n++) {
+            printf("%3d ", matrix[m*cols + n]);
         }
         printf("\n");
     }

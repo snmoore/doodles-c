@@ -36,11 +36,11 @@ int * multiply(int *a, unsigned int arows, unsigned int acols,
 }
 
 // Utility function to print a matrix
-void print(char *label, int *m, unsigned int rows, unsigned int cols) {
+void print(char *label, int *matrix, unsigned int rows, unsigned int cols) {
     printf("\n%s\n", label);
-    for(unsigned int r = 0; r < rows; r++) {
-        for(unsigned int c = 0; c < cols; c++) {
-            printf("%3d ", m[r*cols + c]);
+    for(unsigned int m = 0; m < rows; m++) {
+        for(unsigned int n = 0; n < cols; n++) {
+            printf("%3d ", matrix[m*cols + n]);
         }
         printf("\n");
     }
