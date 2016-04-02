@@ -34,8 +34,11 @@ Multiply two matrices with dimensions m x n and n x p
 ## matrix_transpose
 Transpose a matrix
 
-## quicksort
+## quick_sort
 Sort an array of values using quicksort
+
+## quick_select
+Find the median of an array of values using quickselect
 
 ## reverse
 Reverse words and sentences
