@@ -45,3 +45,6 @@ Round up an integer to the next highest power of 2
 
 ## stack
 A stack implemented using a linked list
+
+## static
+Verify the initialization of static and non-static variables
