@@ -43,7 +43,7 @@ void quicksort(int* data, size_t lo, size_t hi) {
 }
 
 // Print an array of values
-void print(const char* msg, int *data, size_t nelements) {
+void print(const char* msg, const int *data, size_t nelements) {
     if(data != NULL) {
         printf("%s", msg);
         for(size_t i = 0; i < nelements; i++) {
