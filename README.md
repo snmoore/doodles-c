@@ -34,6 +34,9 @@ Multiply two matrices with dimensions m x n and n x p
 ## matrix_transpose
 Transpose a matrix
 
+## quicksort
+Sort an array of values using quicksort
+
 ## reverse
 Reverse words and sentences
 
