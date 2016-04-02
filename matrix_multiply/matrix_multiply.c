@@ -7,19 +7,17 @@
 #include <stdio.h>  // For printf
 #include <stdlib.h> // For calloc, free, EXIT_SUCCESS
 
-int * multiply(int *a, unsigned int arows, unsigned int acols,
-               int *b, unsigned int brows, unsigned int bcols) {
+int* multiply(int* a, unsigned int arows, unsigned int acols,
+              int* b, unsigned int brows, unsigned int bcols) {
     // To multiply matrices the dimensions need to be m x n and n x p
-    if(acols != brows)
-    {
+    if(acols != brows) {
         printf("Cannot multiply matrices with dimensions %d x %d and %d x %d\n", arows, acols, brows, bcols);
         return NULL;
     }
 
     // Resulting matrix has dimensions m x p
     int *c = calloc(arows * bcols, sizeof(int));
-    if(c == NULL)
-    {
+    if(c == NULL) {
         printf("malloc failed: %s", strerror(errno));
         return NULL;
     }

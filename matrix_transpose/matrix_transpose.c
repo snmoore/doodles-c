@@ -5,11 +5,10 @@
 #include <stdio.h>  // For printf
 #include <stdlib.h> // For calloc, free, EXIT_SUCCESS
 
-int * transpose(int *matrix, unsigned int rows, unsigned int cols) {
+int* transpose(int* matrix, unsigned int rows, unsigned int cols) {
     // Resulting matrix has dimensions cols x rows
     int *transp = calloc(cols * rows, sizeof(int));
-    if(transp == NULL)
-    {
+    if(transp == NULL) {
         printf("malloc failed: %s", strerror(errno));
         return NULL;
     }
