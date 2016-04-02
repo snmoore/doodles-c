@@ -1,10 +1,45 @@
 // Verify the initialization of static and non-static variables
 //
 // This resulted from a job interview where the interviewer insisted that
-//
 //      static unsigned char a[256];
+// was not initialized to all 0, but rather contained random data.
 //
-// was not initialized to all 0, but rather contained random data
+//
+// ISO/IEC 9899:1999 section 6.2.4 'Storage durations of objects' says:
+//
+//      An object whose identifier is declared with external or internal
+//      linkage, or with the storage-class specifier static has static storage
+//      duration. Its lifetime is the entire execution of the program and its
+//      stored value is initialized only once, prior to program startup.
+//
+// Hence extern or static globals and static locals all have static storage
+// duration, and all are initialized once.
+//
+//
+// ISO/IEC 9899:1999 section 6.7.8 'Initialization' says:
+//
+//      If an object that has static storage duration is not initialized
+//      explicitly, then:
+//      - if it has pointer type, it is initialized to a null pointer;
+//      - if it has arithmetic type, it is initialized to (positive or unsigned)
+//        zero;
+//      - if it is an aggregate, every member is initialized (recursively)
+//        according to these rules;
+//      - if it is a union, the first named member is initialized (recursively)
+//        according to these rules.
+//
+// Hence static unsigned char a[256]; is initialized to zero.
+//
+//
+// ISO/IEC 9899:1999 section 6.7.8 'Initialization' also says:
+//      If there are fewer initializers in a brace-enclosed list than there are
+//      elements or members of an aggregate, or fewer characters in a string
+//      literal used to initialize an array of known size than there are
+//      elements in the array, the remainder of the aggregate shall be
+//      initialized implicitly the same as objects that have static storage
+//      duration.
+//
+// Hence static unsigned char a[256]={1}; is initialized to 1 followed by all 0
 
 #include <stdint.h> // For uint8_t
 #include <stdio.h>  // For printf
