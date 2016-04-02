@@ -1,4 +1,4 @@
-sources=issort.c
-target=issort
+sources=insertion_sort.c
+target=insertion_sort
 
 include ../Common.mk
