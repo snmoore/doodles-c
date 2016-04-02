@@ -1,15 +1,4 @@
-# See https://www.gnu.org/prep/standards/html_node/Makefile-Basics.html#Makefile-Basics
-SHELL = /bin/sh
+sources=fibonacci.c
+target=fibonacci
 
-.SUFFIXES:
-.SUFFIXES: .c .o
-
-CFLAGS +=-std=c99 -Wall -Wextra -Wpedantic
-
-all: fibonacci
-
-clean:
-	rm fibonacci
-
-fibonacci: fibonacci.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $< -o $@ 
+include ../Common.mk

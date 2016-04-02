@@ -9,21 +9,14 @@ LINT=scan-build -v
 
 .PHONY: all clean lint
 
-all: single double
+all: $(target)
 
 clean:
-	-rm single
-	-rm single.o
-	-rm -rf single.dSYM
-	-rm double
-	-rm double.o
-	-rm -rf double.dSYM
+	-rm $(target)
+	-rm -rf $(target).dSYM
 
-lint: single.c double.c
-	$(LINT) $(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $? -c
+lint: $(sources)
+	$(LINT) $(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $? -o $(target)
 
-single: single.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $? -o $@
-
-double: double.c
+$(target): $(sources)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $? -o $@

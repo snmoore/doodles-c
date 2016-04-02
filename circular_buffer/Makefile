@@ -1,15 +1,4 @@
-# See https://www.gnu.org/prep/standards/html_node/Makefile-Basics.html#Makefile-Basics
-SHELL = /bin/sh
+sources=circular_buffer.c
+target=circular_buffer
 
-.SUFFIXES:
-.SUFFIXES: .c .o
-
-CFLAGS +=-std=c99 -Wall -Wextra -Wpedantic
-
-all: circular_buffer
-
-clean:
-	rm circular_buffer
-
-circular_buffer: circular_buffer.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $< -o $@ 
+include ../Common.mk
