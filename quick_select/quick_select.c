@@ -75,7 +75,7 @@ int main(void) {
     int data[] = { 23, 21, 76, 16, 52, 43 };
     print("Unsorted:      ", data, NELEMENTS(data));
 
-    // Sort the data
+    // Find the median using the quick select algorithm
     int median = quickselect(data, NELEMENTS(data), 0, NELEMENTS(data) - 1);
     print("Partly sorted: ", data, NELEMENTS(data));
     printf("Median value:  %d\n", median);
