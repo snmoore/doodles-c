@@ -1,4 +1,4 @@
-// Ceedling unit tests for Fowler-Noll-Vo (FNV) hash algorithms.
+// Ceedling unit tests for 32-bit FNV-1a hash algorithm.
 //
 // See the Internet draft by Fowler, Noll, Vo, and Eastlake:
 //  The FNV Non-Cryptographic Hash Algorithm
@@ -13,9 +13,9 @@
 
 #include <string.h>     // For strlen
 #include "unity.h"      // Unity test framework
-#include "fnv.h"        // Unit under test
+#include "fnv32.h"      // Unit under test
 
-// FNV offset basis values
+// 32-bit FNV offset basis value
 #define FNV32_BASIS 0x811C9DC5
 
 // Test 1a. Compute a 32-bit FNV-1a hash of a block of data -- null data pointer.
