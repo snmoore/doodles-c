@@ -25,6 +25,9 @@ Trivial byte swapping for little- vs. big-endian
 Generate the first 13 terms of the Fibonacci sequence:
     0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...
 
+## fnv_hash
+32-bit and 64-bit FNV-1a hash algorithms
+
 ## insertion_sort
 Sort an array of values using insertion sort
 

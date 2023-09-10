@@ -1,5 +1,7 @@
 ---
 
+# Ceedling unit tests for 32-bit and 64-bit FNV-1a hash algorithms.
+
 # Notes:
 # Sample project C code is not presently written to produce a release artifact.
 # As such, release build options are disabled.

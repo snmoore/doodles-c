@@ -27,4 +27,4 @@ test_clean:
 	-rm -rf build
 
 $(target): $(sources)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $? -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $^ -o $@
