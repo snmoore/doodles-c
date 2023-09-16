@@ -2,7 +2,7 @@
 //
 // See the Internet draft by Fowler, Noll, Vo, and Eastlake:
 //  The FNV Non-Cryptographic Hash Algorithm
-//  https://datatracker.ietf.org/doc/html/draft-eastlake-fnv-17
+//  https://datatracker.ietf.org/doc/html/draft-eastlake-fnv-20
 //
 // See https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
 
@@ -13,7 +13,7 @@
 // Parameters:
 //  data    : pointer to a contiguous block of data.
 //  length  : length of the block of data, in bytes.
-//  returns : the computed hash value (or the FNV offset basis value 0x811c9dc5 if data is null or length is 0).
+//  returns : the computed hash value (or the FNV offset basis value 0x811C9DC5 if data is null or length is 0).
 uint32_t fnv32(const uint8_t * data, size_t length) {
 #define FNV32_PRIME 0x01000193 // 2^24 + 2^8 + 0x93
 #define FNV32_BASIS 0x811C9DC5
