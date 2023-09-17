@@ -13,7 +13,6 @@
 #include <string.h>         // For strerror
 #include "hash_table.h"     // This module
 
-
 // Create a hash table.
 //
 // This allocates and initialises all memory for the hash table.
@@ -31,30 +30,29 @@ hash_table_t * hash_table_create(hash_key_bits_t key_bits, size_t item_size) {
     }
 
     // Set the metadata.
-    table->key_bits  = key_bits;
-    table->capacity  = 1 << key_bits;
-    table->item_size = item_size;
+    table->key_bits    = key_bits;
+    table->capacity    = 1 << key_bits;
+    table->bucket_size = item_size;
 
-    // Allocate space for the array of flags that tracks which keys are present in the table.
-    table->present = calloc(table->capacity, table->item_size);
-    if(table->present == NULL) {
-        printf("Failed to allocate table flags: %s", strerror(errno));
+    // Allocate space for the array of buckets.
+    table->buckets = calloc(table->capacity, table->bucket_size);
+    if(table->buckets == NULL) {
+        printf("Failed to allocate buckets: %s", strerror(errno));
         free(table);
         return NULL;
     }
 
-    // Allocate space for the array of items.
-    table->items = calloc(table->capacity, table->item_size);
+    // Allocate space for the array of flags that tracks which keys are present in the table.
+    table->present = calloc(table->capacity, table->bucket_size);
     if(table->present == NULL) {
-        printf("Failed to allocate table items: %s", strerror(errno));
-        free(table->present);
+        printf("Failed to allocate flags: %s", strerror(errno));
+        free(table->buckets);
         free(table);
         return NULL;
     }
 
     return table;
 }
-
 
 // Destroy a hash table.
 //
@@ -63,12 +61,11 @@ hash_table_t * hash_table_create(hash_key_bits_t key_bits, size_t item_size) {
 // Parameters:
 //  table : pointer to the hash table.
 void hash_table_destroy(hash_table_t ** table) {
-    free((*table)->items);
+    free((*table)->buckets);
     free((*table)->present);
     free(*table);
     *table = NULL;
 }
-
 
 // Insert an item into a hash table.
 //
@@ -78,25 +75,49 @@ void hash_table_destroy(hash_table_t ** table) {
 //  item_size : size of the item to be inserted, in bytes.
 //  data      : pointer to the item to be inserted.
 void hash_table_insert(hash_table_t * table, uint16_t key, size_t item_size, const void * const item) {
+    // Copy the item into the bucket.
+    const size_t offset = key * item_size;
+    memcpy(table->buckets + offset, item, item_size);
+
     // Mark the key as being present.
     table->present[key] = true;
-
-    // Copy the item into the table.
-    memcpy(&table->items[key], item, item_size);
 }
 
+// Delete an item from a hash table.
+//
+// Parameters:
+//  table     : pointer to the hash table.
+//  key       : key for the item to be deleted.
+//  returns   : true if the key was present and the item was deleted.
+bool hash_table_delete(hash_table_t * table, uint16_t key) {
+    if(table->present[key]) {
+        // Clear the bucket.
+        const size_t offset = key * table->bucket_size;
+        memset(table->buckets + offset, 0, table->bucket_size);
 
-// Get an item from a hash table.
+        // Mark the key as not present.
+        table->present[key] = false;
+        return true;
+    }
+    return false;
+}
+
+// Retrieve an item from a hash table.
 //
 // Parameters:
 //  table     : pointer to the hash table.
 //  key       : key for the item to be retrieved.
 //  item_size : size of the item to be retrieved, in bytes.
-//  data      : pointer into which the item will be retrieved inserted.
-//  returns   : true if the key was present and the value was retrieved, else false.
-bool hash_table_get(hash_table_t * table, uint16_t key, size_t item_size, void * const item) {
+//  item      : pointer into which the item will be retrieved.
+//  returns   : true if the key was present and the item was retrieved.
+//              false if the key was not present, item remains unchanged.
+bool hash_table_retrieve(hash_table_t * table, uint16_t key, size_t item_size, void * const item) {
+    // TODO: Check for item_size vs bucket_size
+
     if(table->present[key]) {
-        memcpy(&table->items[key], item, item_size);
+        // Copy the item from the bucket.
+        const size_t offset = key * item_size;
+        memcpy(item, table->buckets + offset, item_size);
         return true;
     }
     return false;
