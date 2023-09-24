@@ -1,8 +1,7 @@
-# For fnv64.c and fnv64.h
-VPATH=../fnv_hash
+VPATH=../fnv_hash ../hash_table/direct
 CPPFLAGS += $(addprefix -I ,$(VPATH))
 
-sources=fnv64.c main.c
+sources=fnv16.c fnv32.c hash_table.c main.c
 target=word_count
 
 include ../Common.mk
