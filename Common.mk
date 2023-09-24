@@ -8,7 +8,7 @@ CEEDLING=/usr/local/bin/ceedling
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-.PHONY: all clean lint
+.PHONY: all clean lint test test_coverage test_clean
 
 all: $(target)
 
@@ -21,7 +21,10 @@ lint: $(sources)
 
 test:
 	$(CEEDLING) test:all
-	
+
+test_coverage:
+	$(CEEDLING) gcov:all utils:gcov
+
 test_clean:
 	$(CEEDLING) clobber
 	-rm -rf build
