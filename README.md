@@ -49,6 +49,9 @@ Find the median of an array of values using quickselect.
 ## quick_sort
 Sort an array of values using quicksort.
 
+## reverse_bits
+Reverse the bits in a byte.
+
 ## reverse_words
 Reverse words and sentences.
 

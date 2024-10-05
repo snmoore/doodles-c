@@ -1,4 +1,4 @@
-sources=reverse.c
-target=reverse
+sources=reverse_words.c
+target=reverse_words
 
 include ../Common.mk
