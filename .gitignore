@@ -4,3 +4,5 @@
 *.prefs
 
 .DS_Store
+
+word_count/*.txt

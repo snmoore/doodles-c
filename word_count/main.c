@@ -30,6 +30,10 @@ typedef struct word_tab {
 static size_t max_word_length = 0;
 static void print_word(uint16_t key, void * const value);
 
+// Count the number of unique words.
+static uint32_t num_words = 0;
+static void count_words(uint16_t key, void * const value);
+
 // Entry point for the program.
 int main(int argc, char *argv[]) {
     // Process the command line.
@@ -70,7 +74,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
     if(bytes_read != info.st_size) {
-        printf("Bad read from file: read %zu of %llu bytes\n", bytes_read, info.st_size);
+        printf("Bad read from file: read %zu of %lu bytes\n", bytes_read, info.st_size);
     }
 
     //  Create a hash table i.e. allocate and initialise all memory.
@@ -121,9 +125,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Print the results.
+    // Print the count for each individual word.
     word_t word;
     hash_table_iterate(table, sizeof(word), &word, print_word);
+
+    // Print the number of unique words.
+    hash_table_iterate(table, sizeof(word), &word, count_words);
+    printf("\nUnique words: %u\n", num_words);
 
     // Clean up.
     hash_table_destroy(&table);
@@ -138,4 +146,11 @@ static void print_word(uint16_t key, void * const value) {
     (void)key;
     const word_t * const word = value;
     printf("%-*s %hu\n", (int)max_word_length, word->string, word->count);
+}
+
+// Count the number of unique words.
+static void count_words(uint16_t key, void * const value) {
+    (void)key;
+    (void)value;
+    num_words++;
 }
