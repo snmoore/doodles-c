@@ -6,3 +6,5 @@
 .DS_Store
 
 word_count/*.txt
+
+word_count/words/
